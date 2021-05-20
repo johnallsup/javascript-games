@@ -40,6 +40,7 @@ const mine_main = _ => {
   // initialise the arrays
   const init_data = (r=8,c=8,m=10) => {
     cheated = false
+    qi("cheat_button").classList.remove("cheated")
 
     nrows = r
     ncols = c
@@ -306,7 +307,6 @@ const mine_main = _ => {
     if( errors.length > 0 ) {
       qi("error").innerText = errors.join(" ")
     } else {
-      cheated = false
       init_data(r,c,m)
       empty_board()
       make_divs()
@@ -323,6 +323,7 @@ const mine_main = _ => {
     qi("cheat_button").addEventListener("click",e => {
       e.preventDefault()
       cheated = true
+      qi("cheat_button").classList.add("cheated")
       if( gamestate != "init" ) {
         update_all_div_style()
       }

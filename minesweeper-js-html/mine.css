@@ -23,3 +23,7 @@ input {
 button {
   margin-right: 2em;
 }
+#cheat_button.cheated {
+  background-color: #800;
+  color: white;
+}
