@@ -1,0 +1,25 @@
+#board div.cell {
+  display: inline-block;
+  width: 3em;
+  height: 3em;
+  border: 1px solid black;
+  text-align: center;
+  user-select: none;
+  font-size: 14pt;
+  font-weight: bold;
+  font-family: monospace;
+}
+#status {
+  font-size: 2em;
+  font-weight: bold;
+}
+#error {
+  color: red;
+}
+input {
+  width: 4em;
+  margin-right: 2em;
+}
+button {
+  margin-right: 2em;
+}

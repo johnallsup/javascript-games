@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Javascript Minesweeper</title>
+  <script src="mine.js"></script>
+  <link rel="stylesheet" href="mine.css">
+</head>
+<body>
+  <h1>Minesweeper</h1>
+  <p>This is a simple illustration of how to make a minesweeper clone in Javascript and HTML.</p>
+  <p>The styling leaves much to be desired since I was only interested in the logic.</p>
+  <p>Shift-click to toggle a flag, click to try a square.</p>
+  <p>Like with the original <code>winmine.exe</code>, it is 
+    impossible to hit a mine with your first square.</p>
+  <div id="controls">
+    <button id="restart_button">Restart</button>
+    Rows: <input type="number" id="input_rows" value="8"/>
+    Cols: <input type="number" id="input_cols" value="8"/>
+    Mines: <input type="number" id="input_mines" value="10">
+    <button id="cheat_button">Cheat</button>
+  </div>
+  <div id="error"></div>
+  <div id="status">&nbsp</div>
+  <div id="board">
+
+  </div>
+</body>
+</html>
