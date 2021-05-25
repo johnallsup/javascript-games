@@ -34,10 +34,22 @@ window.addEventListener("load",_ => {
   const score_width = 100
   const score_height = 50
 
+  const text_offset_x = 10
+  const text_offset_y = 35
+  const text_size_px = 30
+
+  const level_x = 400
+  const level_y = 200
+  const level_width = 180
+  const level_height = 50
+
   const next_x = 250
   const next_y = 300
   const next_width = 4 * cell_width
   const next_height = 4 * cell_height
+
+  const level_every = 10
+  const level_speed_factor = 0.95
 
   const colours = {
     " ": "#fff",
@@ -59,6 +71,7 @@ window.addEventListener("load",_ => {
   let rendered_board // board with current piece
 
   let score = 0
+  let level = 0
   let is_game_over = false
 
   let current = {
@@ -113,20 +126,23 @@ window.addEventListener("load",_ => {
   const clear_score = _ => {
     ctx.fillStyle = "#fff"
     ctx.fillRect(score_x,score_y,score_width,score_height)
+    ctx.fillRect(level_x,level_y,level_width,level_height)
   }
 
   const paint_score_outline = _ => {
     ctx.strokeStyle = "#000"
     ctx.lineWidth = 1
     ctx.strokeRect(score_x,score_y,score_width,score_height)    
+    ctx.strokeRect(level_x,level_y,level_width,level_height)
   }
 
   const paint_score = _ => {
     clear_score()
     
-    ctx.font = "30px Arial"
+    ctx.font = `${text_size_px}px Arial`
     ctx.fillStyle = "#000"
-    ctx.fillText(`${score}`, score_x+10, score_y+35)
+    ctx.fillText(`${score}`, score_x+text_offset_x, score_y+text_offset_y)
+    ctx.fillText(`Level ${level+1}`, level_x+text_offset_x, score_y+text_offset_y)
 
     paint_score_outline()
   }
@@ -506,8 +522,8 @@ window.addEventListener("load",_ => {
         score += 1
         if( score % 50 == 0 ) {
           // level up
-          const level = (score / 50) | 0
-          tick_time = tick_time_base*(0.95)**level
+          const level = (score / level_every) | 0
+          tick_time = tick_time_base*(level_speed_factor)**level
         }
         // copy lines from row to top
         for(let row2=row; row2 > 0; row2--) {
