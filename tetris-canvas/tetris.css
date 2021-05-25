@@ -1,0 +1,23 @@
+#tetris {
+  font-family: monospace;
+  font-size: 14pt;
+  white-space: pre-wrap;
+}
+
+#tetris_board {
+  border: 1px solid black;
+  background-color: #fdd;
+  width: 10ch;
+}
+
+#tetris_next {
+  border: 1px solid black;
+  background-color: #dfd;
+  width: 4ch;
+}
+
+#tetris_score {
+  border: 1px solid black;
+  background-color: #ddf;
+  width: 16ch;
+}
