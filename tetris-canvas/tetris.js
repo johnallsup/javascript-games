@@ -568,7 +568,7 @@ window.addEventListener("load",_ => {
     })
   }
   const main = async _ => {
-    backdrop_image = await asyncLoadImage("backdrop.png")
+    backdrop_image = await asyncLoadImage("backdrop.jpg")
     gameover_image = await asyncLoadImage("gameover.png")
     paint_backdrop()
     start_game()
