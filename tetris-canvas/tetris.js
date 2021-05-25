@@ -15,10 +15,6 @@ window.addEventListener("load",_ => {
     return xs[randrange(xs.length)]
   }
 
-  // const board_div = qi("tetris_board")
-  // const next_div = qi("tetris_next")
-  // const score_div = qi("tetris_score")
-
   const canvas = qi("tetris")
   const ctx = canvas.getContext("2d")
 
@@ -53,6 +49,9 @@ window.addEventListener("load",_ => {
     "F": "#f0f",
     "G": "#777"
   }
+
+  let backdrop_image
+  let gameover_image
 
   // board is an array of arrays of 1-char strings
   // one for each cell of the board
@@ -166,18 +165,29 @@ window.addEventListener("load",_ => {
     paint_board_outline()
   }
 
+  const paint_game_over = _ => {
+    const x = ((canvas.width - gameover_image.width)/2)|0
+    const y = ((canvas.height - gameover_image.height)/2)|0
+    ctx.drawImage(gameover_image,x,y)
+  }
+
   const paint = _ => {
     render_board() // produce array of cells with frozen and current
+    paint_backdrop()
     paint_board()
     paint_current()
     paint_next()
     paint_score()
+    if( is_game_over ) paint_game_over()
+  }
+
+  const paint_backdrop = _ => {
+    ctx.drawImage(backdrop_image,0,0)
   }
 
 
   /////////////////////////////
   // Pieces
-
 
   // a board is an array of nrows rows
   // a row is an array of ncols 1-char strings
@@ -409,6 +419,7 @@ window.addEventListener("load",_ => {
   const start_game = _ => {
     score = 0
     is_game_over = false
+    tick_time = tick_time_base
 
     // clear the board
     board = create_empty_board()
@@ -493,6 +504,11 @@ window.addEventListener("load",_ => {
       }
       if( completed ) {
         score += 1
+        if( score % 50 == 0 ) {
+          // level up
+          const level = (score / 50) | 0
+          tick_time = tick_time_base*(0.95)**level
+        }
         // copy lines from row to top
         for(let row2=row; row2 > 0; row2--) {
           for(let col=0; col<ncols; col++) {
@@ -507,7 +523,8 @@ window.addEventListener("load",_ => {
     return true
   }
 
-  let tick_time = 1000
+  const tick_time_base = 1000
+  let tick_time = tick_time_base
   let tick_timeout = null
 
   const clear_tick = _ => {
@@ -537,7 +554,24 @@ window.addEventListener("load",_ => {
   }
 
   window.addEventListener("keydown", handle_key)
-  
 
-  start_game()
+  const asyncLoadImage = async src => {
+    return new Promise((resolve,reject) => {
+      let img = new Image()
+      img.addEventListener("load", _ => {
+        return resolve(img)
+      })
+      img.addEventListener("error",_ => {
+        return reject()
+      })
+      img.src = src
+    })
+  }
+  const main = async _ => {
+    backdrop_image = await asyncLoadImage("backdrop.png")
+    gameover_image = await asyncLoadImage("gameover.png")
+    paint_backdrop()
+    start_game()
+  }
+  main()
 })
