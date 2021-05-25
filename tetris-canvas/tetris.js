@@ -48,9 +48,6 @@ window.addEventListener("load",_ => {
   const next_width = 4 * cell_width
   const next_height = 4 * cell_height
 
-  const level_every = 10
-  const level_speed_factor = 0.95
-
   const colours = {
     " ": "#fff",
     "A": "#f00",
@@ -70,9 +67,15 @@ window.addEventListener("load",_ => {
   let board // board without current piece
   let rendered_board // board with current piece
 
+  ///////////////////////
+  // GAME STATE
+
   let score = 0
   let level = 0
   let is_game_over = false
+
+  const level_every = 10
+  const level_speed_factor = 0.95
 
   let current = {
     x: 0, y: 0, piece_index: 0, rotation: 0, next_piece_index: 0, next_rotation: 0
@@ -417,6 +420,13 @@ window.addEventListener("load",_ => {
       if( can_move_to(x, y + 1, piece_index, rotation) ) {
         current.y += 1
       }
+    } else if( key == " " ) {
+      pd(e)
+      // drop piece
+      while( can_move_to(x, current.y + 1, piece_index, rotation) ) {
+        current.y += 1
+      }
+      tick()
     } else if( key == "q" ) {
       pd(e)
       if( is_game_over ) {
@@ -520,9 +530,9 @@ window.addEventListener("load",_ => {
       }
       if( completed ) {
         score += 1
-        if( score % 50 == 0 ) {
+        if( score % level_every == 0 ) {
           // level up
-          const level = (score / level_every) | 0
+          level = (score / level_every) | 0
           tick_time = tick_time_base*(level_speed_factor)**level
         }
         // copy lines from row to top
