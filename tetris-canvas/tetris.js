@@ -29,19 +29,32 @@ window.addEventListener("load",_ => {
   const board_x = 20
   const board_y = 20
 
-  const score_x = 250
-  const score_y = 200
-  const score_width = 100
-  const score_height = 50
-
   const text_offset_x = 10
   const text_offset_y = 35
   const text_size_px = 30
 
-  const level_x = 400
-  const level_y = 200
-  const level_width = 180
-  const level_height = 50
+  const playing_score_level_position = {
+    score_x: 250,
+    score_y: 200,
+    score_width: 100,
+    score_height: 50,
+    level_x: 400,
+    level_y: 200,
+    level_width: 180,
+    level_height: 50  
+  }
+  const game_over_score_level_position = {
+    score_x: 250,
+    score_y: 400,
+    score_width: 100,
+    score_height: 50,
+    level_x: 400,
+    level_y: 400,
+    level_width: 180,
+    level_height: 50  
+  }
+  let score_level_position = playing_score_level_position
+
 
   const next_x = 250
   const next_y = 300
@@ -127,12 +140,18 @@ window.addEventListener("load",_ => {
   }
 
   const clear_score = _ => {
+    const { score_x, score_y, score_width, score_height,
+      level_x, level_y, level_width, level_height } =
+      score_level_position
     ctx.fillStyle = "#fff"
     ctx.fillRect(score_x,score_y,score_width,score_height)
     ctx.fillRect(level_x,level_y,level_width,level_height)
   }
 
   const paint_score_outline = _ => {
+    const { score_x, score_y, score_width, score_height,
+      level_x, level_y, level_width, level_height } =
+      score_level_position
     ctx.strokeStyle = "#000"
     ctx.lineWidth = 1
     ctx.strokeRect(score_x,score_y,score_width,score_height)    
@@ -140,6 +159,10 @@ window.addEventListener("load",_ => {
   }
 
   const paint_score = _ => {
+    const { score_x, score_y, score_width, score_height,
+      level_x, level_y, level_width, level_height } =
+      score_level_position
+
     clear_score()
     
     ctx.font = `${text_size_px}px Arial`
@@ -149,7 +172,6 @@ window.addEventListener("load",_ => {
 
     paint_score_outline()
   }
-  
 
   const paint_next = _ => {
     const { next_piece_index, next_rotation } = current
@@ -185,8 +207,15 @@ window.addEventListener("load",_ => {
   }
 
   const paint_game_over = _ => {
+    // grey out game
+    const width = canvas.width
+    const height = canvas.height
+    ctx.fillStyle = "#0007"
+    ctx.fillRect(0,0,width,height)
+
+    // paint game over image
     const x = ((canvas.width - gameover_image.width)/2)|0
-    const y = ((canvas.height - gameover_image.height)/2)|0
+    const y = 50
     ctx.drawImage(gameover_image,x,y)
   }
 
@@ -196,8 +225,13 @@ window.addEventListener("load",_ => {
     paint_board()
     paint_current()
     paint_next()
+    if( is_game_over ) {
+      score_level_position = game_over_score_level_position
+      paint_game_over()
+    } else {
+      score_level_position = playing_score_level_position
+    }
     paint_score()
-    if( is_game_over ) paint_game_over()
   }
 
   const paint_backdrop = _ => {
